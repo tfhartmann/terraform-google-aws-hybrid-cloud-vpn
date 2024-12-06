@@ -13,16 +13,31 @@
  *
  */
 
+terraform {
+  required_providers {
+    google = {
+      source  = "hashicorp/google"
+      version = "6.12.0"
+    }
+    google-beta = {
+      source  = "hashicorp/google-beta"
+      version = "6.12.0"
+    }
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
+    }
+  }
+}
+
 provider "google" {
   project = "project"
   region  = "us-central1"
-  version = "3.11.0"
 }
 
 provider "google-beta" {
   project = "project"
   region  = "us-central1"
-  version = "3.13.0"
 }
 
 provider "google" {
@@ -50,8 +65,7 @@ provider "google-beta" {
 }
 
 provider "aws" {
-  region  = "us-east-1"
-  version = "2.51.0"
+  region = "us-east-1"
 }
 
 # N. Virginia / USA
@@ -87,7 +101,7 @@ module "tgw-us-east-1" {
 
 module "cb-us-east-1" {
   source             = "github.com/spotify/terraform-google-aws-hybrid-cloud-vpn"
-  transit_gateway_id = module.tgw-us-east-1.this_ec2_transit_gateway_id
+  transit_gateway_id = module.tgw-us-east-1.ec2_transit_gateway_id
   google_network     = "default"
   amazon_side_asn    = 64512
   google_side_asn    = 65534
@@ -126,7 +140,7 @@ module "tgw-eu-central-1" {
 }
 module "cb-eu-central-1" {
   source             = "github.com/spotify/terraform-google-aws-hybrid-cloud-vpn"
-  transit_gateway_id = module.tgw-eu-central-1.this_ec2_transit_gateway_id
+  transit_gateway_id = module.tgw-eu-central-1.ec2_transit_gateway_id
   google_network     = "default"
   amazon_side_asn    = 64513
   google_side_asn    = 65533

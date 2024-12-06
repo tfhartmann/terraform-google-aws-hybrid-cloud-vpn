@@ -10,20 +10,31 @@
  *
  */
 
+terraform {
+  required_providers {
+    google-beta = {
+      source  = "hashicorp/google-beta"
+      version = "6.12.0"
+    }
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
+    }
+  }
+}
+
 provider "google-beta" {
   project = "project"
   region  = "us-central1"
-  version = "3.11.0"
 }
 
 provider "aws" {
-  region  = "us-east-1"
-  version = "2.51.0"
+  region = "us-east-1"
 }
 
 module "tgw-us-east-1" {
   source          = "terraform-aws-modules/transit-gateway/aws"
-  version         = "1.1.0"
+  version         = "2.12.2"
   name            = "tgw-example-us-east-1"
   description     = "TGW example shared with several other AWS accounts"
   amazon_side_asn = "64512"
@@ -38,7 +49,7 @@ module "tgw-us-east-1" {
 
 module "cb-us-east-1" {
   source             = "github.com/spotify/terraform-google-aws-hybrid-cloud-vpn"
-  transit_gateway_id = module.tgw-us-east-1.this_ec2_transit_gateway_id
+  transit_gateway_id = module.tgw-us-east-1.ec2_transit_gateway_id
   google_network     = default
   amazon_side_asn    = 64512
   google_side_asn    = 65534
